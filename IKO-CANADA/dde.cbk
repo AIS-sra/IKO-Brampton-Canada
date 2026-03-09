@@ -1,5 +1,16 @@
 Begin DDE Information.
-    Last DDE Source:	38
+    Last DDE Source:	39
+Begin DDE Source Definition.
+    Source Name:		OPCUA
+    Application Name:		\\localhost\Gateway
+    Topic Name:			OPCUA_DeviceGroup
+    DDE Source ID:		39
+    Request Initial Data:	1
+    Always Advise:		0
+    SuiteLink:			1
+    Begin DDE Points
+    End DDE Points
+End DDE Source Definition.
 Begin DDE Source Definition.
     Source Name:		MD_INTEGER
     Application Name:		OPCLink

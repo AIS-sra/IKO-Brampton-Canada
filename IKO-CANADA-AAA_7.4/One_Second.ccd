@@ -1,0 +1,25 @@
+: 42_0
+0 JUMP ;
+: 42_1
+
+1 LINE.NUM
+  1.0    FDELAY
+0 JUMP ;
+: 42_2
+1 LINE.NUM ^Weight_Corr_Alert @@ 1 = ^Weight_Corr_Alert_CTR @@ 1 > LAND  IF 
+1 LINE.NUM 0 ^Weight_Corr_Alert @! 
+1 LINE.NUM 0 ^Weight_Corr_Alert_CTR @! 
+1 LINE.NUM ELSE 
+1 LINE.NUM THEN 
+3 LINE.NUM ^Weight_Corr_Alert @@ 1 = IF 
+3 LINE.NUM ^Weight_Corr_Alert_CTR  1+@! 
+3 LINE.NUM ELSE 
+3 LINE.NUM THEN 
+-2 JUMP ;
+T: T42
+DUMMY
+42_0
+42_1
+42_2
+T;
+&One_Second ' T42 SETTASK

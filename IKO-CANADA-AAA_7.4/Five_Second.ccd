@@ -1,0 +1,17 @@
+: 43_0
+0 JUMP ;
+: 43_1
+2 LINE.NUM 5 I>F  FDELAY 
+4 LINE.NUM ^WW_Comm_CTR @@ ^WW_Comm_CTR_Temp @@ = ^Scanner_Status @@ 3 < ^Scanner_Status @@ 4 > LOR  LAND  IF 
+4 LINE.NUM 3 ^Scanner_Status @! 
+4 LINE.NUM ELSE 
+4 LINE.NUM THEN 
+6 LINE.NUM ^WW_Comm_CTR @@ ^WW_Comm_CTR_Temp @! 
+8 LINE.NUM 15 I>F  FDELAY 
+-1 JUMP ;
+T: T43
+DUMMY
+43_0
+43_1
+T;
+&Five_Second ' T43 SETTASK

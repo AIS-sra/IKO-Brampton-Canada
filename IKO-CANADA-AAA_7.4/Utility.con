@@ -1,0 +1,903 @@
+: 'Utility ." 09/03/2025 14:54:17" ;
+: 33_0
+8 JUMP ;
+: 33_2
+2 LINE.NUM ^Number_Of_Comp_Scans @@ ^Scans_In_Comp @@ F>= ^Speed_Now @@ ^Min_Line_Speed @@ F> LAND  ^Scanner_Status @@ 2 = ^Scanner_Status @@ 5 = LOR  LAND  IF 
+4 LINE.NUM 1 I>F ^OK_For_Control @! 
+6 LINE.NUM ELSE 
+7 LINE.NUM 0 I>F ^OK_For_Control @! 
+9 LINE.NUM THEN 
+15 LINE.NUM ^Left_Deckle @@ ^Profile_X_1 @! 
+16 LINE.NUM 55 I>F ^Right_Deckle @@ F- ^Left_Deckle @@ F- 7 I>F F/ ^Profile_X_1 @@ F+ ^Profile_X_2 @! 
+17 LINE.NUM 55 I>F ^Right_Deckle @@ F- ^Left_Deckle @@ F- 7 I>F F/ ^Profile_X_2 @@ F+ ^Profile_X_3 @! 
+18 LINE.NUM 55 I>F ^Right_Deckle @@ F- ^Left_Deckle @@ F- 7 I>F F/ ^Profile_X_3 @@ F+ ^Profile_X_4 @! 
+19 LINE.NUM 55 I>F ^Right_Deckle @@ F- ^Left_Deckle @@ F- 7 I>F F/ ^Profile_X_4 @@ F+ ^Profile_X_5 @! 
+20 LINE.NUM 55 I>F ^Right_Deckle @@ F- ^Left_Deckle @@ F- 7 I>F F/ ^Profile_X_5 @@ F+ ^Profile_X_6 @! 
+21 LINE.NUM 55 I>F ^Right_Deckle @@ F- ^Left_Deckle @@ F- 7 I>F F/ ^Profile_X_6 @@ F+ ^Profile_X_7 @! 
+22 LINE.NUM 55 I>F ^Right_Deckle @@ F- ^Profile_X_8 @! 
+0 JUMP ;
+: 33_3
+1 LINE.NUM ^OK_For_Control @@ 0 I>F F= IF 
+3 LINE.NUM 4 ^Ctrl_Status @! 
+5 LINE.NUM ELSE 
+8 LINE.NUM THEN 
+0 JUMP ;
+: 33_4
+1 LINE.NUM ^OK_For_Control @@ 1 I>F F= ^Auto_Ctrl_Req @@ 0 = LAND  IF 
+4 LINE.NUM 2 ^Ctrl_Status @! 
+6 LINE.NUM ELSE 
+9 LINE.NUM THEN 
+0 JUMP ;
+: 33_5
+1 LINE.NUM ^Scanner_Status @@ 2 = ^Scanner_Status @@ 5 = LOR  ^OK_For_Control @@ 1 I>F F= LAND  ^Auto_Ctrl_Req @@ 1 = LAND  IF 
+3 LINE.NUM 1 ^Ctrl_Status @! 
+4 LINE.NUM 0 I>F ^Max_Corr_Limit_Flag @! 
+6 LINE.NUM THEN 
+8 LINE.NUM ^OK_For_Control @@ 1 I>F F= ^Max_Corr_Limit_Flag @@ 1 I>F F= ^Max_Error_Limit_Flag @@ 1 I>F F= LOR  LAND  IF 
+10 LINE.NUM 3 ^Ctrl_Status @! 
+13 LINE.NUM THEN 
+18 LINE.NUM ^Weight_Error_Neg @@ 5 >= ^Weight_Error_Pos @@ 5 >= LOR  IF 
+18 LINE.NUM 1 I>F ^Max_Corr_Limit_Flag @! 
+18 LINE.NUM 0 ^Auto_Ctrl_Req @! 
+18 LINE.NUM 0 ^Weight_Error_Pos @! 
+18 LINE.NUM 0 ^Weight_Error_Neg @! 
+18 LINE.NUM ELSE 
+18 LINE.NUM THEN 
+20 JUMP ;
+: 33_15
+28 JUMP ;
+: 33_19
+
+1 LINE.NUM
+  ^Act_Counter   1+@!
+47 JUMP ;
+: 33_22
+
+1 LINE.NUM
+  ^ONE @@   ABS
+  ^Stdz_Required @! 
+-2 JUMP ;
+: 33_29
+4 LINE.NUM 6.02500010e+000 ^Profile_Y @! 
+5 LINE.NUM ^Profile_Y_3 @@ ^Weight_TGT @! 
+6 LINE.NUM 0 ^Auto_Ctrl_Req @! 
+8 LINE.NUM 3 I>F  FDELAY 
+9 LINE.NUM ^Profile_Y_3 @@ ^Weight_TGT @! 
+11 LINE.NUM 1 ^Control_Startup_Flag @! 
+14 LINE.NUM 6.02500010e+000 ^Profile_Y @! 
+16 LINE.NUM ^Profile_Y_1 @@ ^Profile_Y_1_C @! 
+17 LINE.NUM ^Profile_Y_2 @@ ^Profile_Y_2_C @! 
+18 LINE.NUM ^Profile_Y_3 @@ ^Profile_Y_3_C @! 
+19 LINE.NUM ^Profile_Y_4 @@ ^Profile_Y_4_C @! 
+20 LINE.NUM ^Profile_Y_5 @@ ^Profile_Y_5_C @! 
+22 LINE.NUM ^Profile_Y_2 @@ ^Profile_Y_3 @@ F- ^Profile_Y_2_D @! 
+23 LINE.NUM ^Profile_Y_1 @@ ^Profile_Y_3 @@ F- ^Profile_Y_1_D @! 
+24 LINE.NUM ^Profile_Y_4 @@ ^Profile_Y_3 @@ F- ^Profile_Y_4_D @! 
+25 LINE.NUM ^Profile_Y_5 @@ ^Profile_Y_3 @@ F- ^Profile_Y_5_D @! 
+28 LINE.NUM 0 ^Spread_Scans @! 
+30 LINE.NUM 0 ^Prod_Change_Flag @! 
+32 LINE.NUM 0 ^Loop_Counter_1 @! 
+33 LINE.NUM BEGIN ^Loop_Counter_1 @@ 400 <= WHILE 
+34 LINE.NUM 100 I>F ^Loop_Counter_1 @@ }Last_Scan_Scaled TABLE! 
+35 LINE.NUM 100 I>F ^Loop_Counter_1 @@ }Comp_Scan_Scaled TABLE! 
+36 LINE.NUM ^Loop_Counter_1  1+@! 
+37 LINE.NUM REPEAT 
+38 LINE.NUM 0 ^Loop_Counter_1 @! 
+40 LINE.NUM ^FWD_Edge_Inches @@ ^Fwd_Edge_Inches_Temp @! 
+41 LINE.NUM ^REV_Edge_Inches @@ ^Rev_Edge_Inches_Temp @! 
+43 LINE.NUM ^REV_Edge_Inches @@ ^FWD_Edge_Inches @@ F- ^Web_Width_Inches @! 
+44 LINE.NUM ^REV_Edge_Inches @@ ^FWD_Edge_Inches @@ F- ^Web_Width @! 
+47 LINE.NUM ^Number_Of_Bolts_Active @@F ^Profile_X_1 @! 
+48 LINE.NUM ^Profile_X_1 @@ ^Number_Of_Bolts_Active @@ 8 / I>F F- 1 I>F F+ ^Profile_X_2 @! 
+49 LINE.NUM ^Profile_X_2 @@ ^Number_Of_Bolts_Active @@ 8 / I>F F- ^Profile_X_3 @! 
+50 LINE.NUM ^Profile_X_3 @@ ^Number_Of_Bolts_Active @@ 8 / I>F F- ^Profile_X_4 @! 
+51 LINE.NUM ^Profile_X_4 @@ ^Number_Of_Bolts_Active @@ 8 / I>F F- ^Profile_X_5 @! 
+52 LINE.NUM ^Profile_X_5 @@ ^Number_Of_Bolts_Active @@ 8 / I>F F- ^Profile_X_6 @! 
+53 LINE.NUM ^Profile_X_6 @@ ^Number_Of_Bolts_Active @@ 8 / I>F F- ^Profile_X_7 @! 
+54 LINE.NUM ^Profile_X_7 @@ ^Number_Of_Bolts_Active @@ 8 / I>F F- ^Profile_X_8 @! 
+55 LINE.NUM 1 I>F ^Profile_X_9 @! 
+3 JUMP ;
+: 33_30
+
+1 LINE.NUM
+  ^STDZ_Timer   StartTimer
+
+2 LINE.NUM
+  ^ONE @@   ABS
+  ^apc_AutoLoad @! 
+
+3 LINE.NUM
+  30  
+  ^Comm_Timer I@!   
+
+4 LINE.NUM
+  ^Comm_Timer   StartTimer
+8 JUMP ;
+: 33_52
+
+1 LINE.NUM
+  ^ZERO @@   ABS
+  ^Ctrl_Comm_Alarm @! 
+-6 JUMP ;
+: 33_53
+-7 JUMP ;
+: 33_59
+2 LINE.NUM 3 I>F  FDELAY 
+4 LINE.NUM 6.02500010e+000 ^Profile_Y @! 
+6 LINE.NUM ^REV_Edge_Inches @@ ^Profile_X_1 @! 
+7 LINE.NUM ^Profile_X_1 @@ ^REV_Edge_Inches @@ ^FWD_Edge_Inches @@ F- 8 I>F F/ F- ^Profile_X_2 @! 
+8 LINE.NUM ^Profile_X_2 @@ ^REV_Edge_Inches @@ ^FWD_Edge_Inches @@ F- 8 I>F F/ F- ^Profile_X_3 @! 
+9 LINE.NUM ^Profile_X_3 @@ ^REV_Edge_Inches @@ ^FWD_Edge_Inches @@ F- 8 I>F F/ F- ^Profile_X_4 @! 
+10 LINE.NUM ^Profile_X_4 @@ ^REV_Edge_Inches @@ ^FWD_Edge_Inches @@ F- 8 I>F F/ F- ^Profile_X_5 @! 
+11 LINE.NUM ^Profile_X_5 @@ ^REV_Edge_Inches @@ ^FWD_Edge_Inches @@ F- 8 I>F F/ F- ^Profile_X_6 @! 
+12 LINE.NUM ^Profile_X_6 @@ ^REV_Edge_Inches @@ ^FWD_Edge_Inches @@ F- 8 I>F F/ F- ^Profile_X_7 @! 
+13 LINE.NUM ^Profile_X_7 @@ ^REV_Edge_Inches @@ ^FWD_Edge_Inches @@ F- 8 I>F F/ F- ^Profile_X_8 @! 
+14 LINE.NUM ^FWD_Edge_Inches @@ ^Profile_X_9 @! 
+14 JUMP ;
+: 33_84
+
+1 LINE.NUM
+  ^ZERO @@   ABS
+  ^OffSheet_Latch @! 
+30 JUMP ;
+: 33_88
+1 LINE.NUM ^Scanner_Status @@ 2 = IF 
+2 LINE.NUM 3 ^Scanner_Status @! 
+3 LINE.NUM ELSE 
+4 LINE.NUM THEN 
+6 LINE.NUM ^Scanner_Status @@ 11 = IF 
+7 LINE.NUM 3 ^Scanner_Status @! 
+8 LINE.NUM ELSE 
+9 LINE.NUM THEN 
+11 LINE.NUM ^Scanner_Status @@ 12 = IF 
+12 LINE.NUM 3 ^Scanner_Status @! 
+13 LINE.NUM ELSE 
+14 LINE.NUM THEN 
+16 LINE.NUM ^Scanner_Status @@ 1 = IF 
+17 LINE.NUM 3 ^Scanner_Status @! 
+18 LINE.NUM ELSE 
+19 LINE.NUM THEN 
+20 LINE.NUM ^Scanner_Status @@ 10 = IF 
+21 LINE.NUM 3 ^Scanner_Status @! 
+22 LINE.NUM ELSE 
+23 LINE.NUM THEN 
+24 LINE.NUM ^Scanner_Status @@ 5 = IF 
+25 LINE.NUM 3 ^Scanner_Status @! 
+26 LINE.NUM ELSE 
+27 LINE.NUM THEN 
+28 LINE.NUM ^Scanner_Status @@ 7 = IF 
+29 LINE.NUM 3 ^Scanner_Status @! 
+30 LINE.NUM ELSE 
+31 LINE.NUM THEN 
+32 LINE.NUM ^Scanner_Status @@ 8 = IF 
+33 LINE.NUM 3 ^Scanner_Status @! 
+34 LINE.NUM ELSE 
+35 LINE.NUM THEN 
+36 LINE.NUM ^Scanner_Status @@ 9 = IF 
+37 LINE.NUM 3 ^Scanner_Status @! 
+38 LINE.NUM ELSE 
+39 LINE.NUM THEN 
+40 LINE.NUM ^Scanner_Status @@ 6 = IF 
+41 LINE.NUM 3 ^Scanner_Status @! 
+42 LINE.NUM ELSE 
+43 LINE.NUM THEN 
+44 LINE.NUM ^Scanner_Status @@ 69 = IF 
+45 LINE.NUM 3 ^Scanner_Status @! 
+46 LINE.NUM ELSE 
+47 LINE.NUM THEN 
+48 LINE.NUM ^Scanner_Status @@ 4 = IF 
+49 LINE.NUM 3 ^Scanner_Status @! 
+50 LINE.NUM ELSE 
+51 LINE.NUM THEN 
+54 LINE.NUM 1 ^OffSheet_Latch @! 
+29 JUMP ;
+: 33_98
+
+1 LINE.NUM
+  ^ZERO @@   ABS
+  ^OnSheet_Latch @! 
+26 JUMP ;
+: 33_99
+1 LINE.NUM ^Scanner_Status @@ 4 = IF 
+2 LINE.NUM 1 ^Scanner_Status @! 
+3 LINE.NUM ELSE 
+4 LINE.NUM THEN 
+6 LINE.NUM 1 ^OnSheet_Latch @! 
+25 JUMP ;
+: 33_120
+
+1 LINE.NUM
+  ^FIFTY_mSec_Delay @@   DELAY
+0 JUMP ;
+: 33_126
+1 LINE.NUM ^Encoder_Now @@ ^FWD_Edge @@ F> ^Encoder_Now @@ ^REV_Edge @@ F< LAND  IF 
+2 LINE.NUM ^Basis_Weight_Now @@ ^BW_Now_Inch @! 
+3 LINE.NUM THEN 
+5 LINE.NUM ^Scans_2_STDZ @@ ^STDZ_Interval @! 
+7 LINE.NUM ~THICKNESS_ALARM @@I 1 = ^Thickness_Alarm_ACK @@ 1 = LAND  IF 
+8 LINE.NUM 0 ~THICKNESS_ALARM @! 
+9 LINE.NUM ELSE 
+9 LINE.NUM THEN 
+11 LINE.NUM ^Spread_Reset @@ 1 = IF 
+12 LINE.NUM 0 ^Spread_Scans @! 
+13 LINE.NUM 0 ^Spread_Reset @! 
+14 LINE.NUM 0 I>F ^Spread_CD @! 
+15 LINE.NUM 0 I>F ^Spread_MD @! 
+16 LINE.NUM 0 I>F ^Spread_Total @! 
+17 LINE.NUM ELSE 
+18 LINE.NUM THEN 
+21 LINE.NUM ~E_STOP_SSIU @@I 0 = IF 
+22 LINE.NUM 69 ^Scanner_Status @! 
+23 LINE.NUM 0 I>F ~Motor_Control @! 
+24 LINE.NUM 0 ~Shutter_Insert @! 
+25 LINE.NUM THEN 
+28 LINE.NUM ^Web_Width @@ ^Web_Width_Inches @! 
+30 LINE.NUM ~Line_Speed_IP @@ 6.24933014e+001 F* 2.49695999e+002 F- ^Speed_Now @! 
+32 LINE.NUM ~E_STOP_SSIU @@I 0 = IF 
+32 LINE.NUM 1 I>F ^E_Stop_Alarm @! 
+32 LINE.NUM 1 ~E_Stop_Out @! 
+32 LINE.NUM ELSE 
+32 LINE.NUM 0 I>F ^E_Stop_Alarm @! 
+32 LINE.NUM 0 ~E_Stop_Out @! 
+32 LINE.NUM THEN 
+35 LINE.NUM ^Scanner_Status @@ 4 = ^Auto_Scan_Start @@ 1 = LAND  ^Speed_Now @@ ^Auto_Scan_Speed @@ F> LAND  ~E_Stop_Out @@I 0 = LAND  IF 
+35 LINE.NUM 1 ^Scanner_Status @! 
+35 LINE.NUM ELSE 
+35 LINE.NUM THEN 
+37 LINE.NUM ^Scanner_Status @@ 4 = ^Stdz_Required @@ 1 = LAND  ~E_Stop_Out @@I 0 = LAND  ^Bad_STDZ_Alarm @@ 0 I>F F= LAND  IF 
+38 LINE.NUM 10 ^Scanner_Status @! 
+39 LINE.NUM THEN 
+-18 JUMP ;
+: 33_127
+
+1 LINE.NUM
+  ^ONE @@   ABS
+  ^REV_Prox_Alarm I@! 
+
+2 LINE.NUM
+  ~Motor_On_Off   OFF
+
+3 LINE.NUM
+  ^ZERO @@   ABS
+  ~Motor_Control I@! 
+
+4 LINE.NUM
+  2.0    FDELAY
+
+5 LINE.NUM
+  ^THREE @@   ABS
+  ^Scanner_Status @! 
+-3 JUMP ;
+: 33_131
+
+1 LINE.NUM
+  ^ONE @@   ABS
+  ^FWD_Prox_Alarm I@! 
+
+2 LINE.NUM
+  ~Motor_On_Off   OFF
+
+3 LINE.NUM
+  ^ZERO @@   ABS
+  ~Motor_Control I@! 
+
+4 LINE.NUM
+  2.0    FDELAY
+
+5 LINE.NUM
+  ^THREE @@   ABS
+  ^Scanner_Status @! 
+27 JUMP ;
+: 33_138
+
+1 LINE.NUM
+  ^ZERO @@   ABS
+  ^FWD_Prox_Alarm I@! 
+1 JUMP ;
+: 33_143
+
+1 LINE.NUM
+  ^ZERO @@   ABS
+  ^REV_Prox_Alarm I@! 
+0 JUMP ;
+: 33_148
+12 JUMP ;
+: 33_197
+
+1 LINE.NUM
+  ^Scanner_Moving   StopTimer
+
+2 LINE.NUM
+  ^Scanner_Moving   StartTimer
+
+3 LINE.NUM
+  ^REV_Crawl_Speed @@   FABS
+  ~Motor_Control @! 
+
+4 LINE.NUM
+  ^Scanner_Failure   1+@!
+13 JUMP ;
+: 33_237
+2 LINE.NUM ^Edge_Trim_L_Inch @@ ^Web_Width_Inches @@ 400 I>F F/ F/ ^Edge_Trim_L_Stat_Int F@! 
+4 LINE.NUM 800 I>F ^Web_Width_Inches @@ F/ ^Edge_Trim_L_Inch @@ F* ^Edge_Trim_L_Pix F@! 
+7 LINE.NUM 400 I>F ^Edge_Trim_R_Inch @@ ^Web_Width_Inches @@ 400 I>F F/ F/ F- ^Edge_Trim_R_Stat_Int F@! 
+9 LINE.NUM 800 I>F 800 I>F ^Web_Width_Inches @@ F/ ^Edge_Trim_R_Inch @@ F* F- ^Edge_Trim_R_Pix F@! 
+11 LINE.NUM ^Edge_Trim_R_Stat_Int @@ 399 <= IF 
+12 LINE.NUM ^Edge_Trim_R_Stat_Int @@F ^Edge_Trim_R_Stat @! 
+13 LINE.NUM ELSE 
+13 LINE.NUM 399 I>F ^Edge_Trim_R_Stat @! 
+14 LINE.NUM 399 ^Edge_Trim_R_Stat_Int @! 
+15 LINE.NUM THEN 
+17 LINE.NUM ^Edge_Trim_L_Stat_Int @@ 2 >= IF 
+18 LINE.NUM ^Edge_Trim_L_Stat_Int @@F ^Edge_Trim_L_Stat @! 
+19 LINE.NUM ELSE 
+19 LINE.NUM 2 I>F ^Edge_Trim_L_Stat @! 
+20 LINE.NUM 2 ^Edge_Trim_L_Stat_Int @! 
+21 LINE.NUM THEN 
+22 LINE.NUM ^Edge_Trim_R_Stat @@ 399 I>F F> IF 
+22 LINE.NUM 399 I>F ^Edge_Trim_R_Stat @! 
+22 LINE.NUM ELSE 
+22 LINE.NUM THEN 
+23 LINE.NUM ^Edge_Trim_L_Stat @@ 2 I>F F< IF 
+23 LINE.NUM 2 I>F ^Edge_Trim_L_Stat @! 
+23 LINE.NUM ELSE 
+23 LINE.NUM THEN 
+26 LINE.NUM ^Edge_Trim_R_Stat @@ ^Edge_Trim_L_Stat @@ F- 1 I>F F+ ^Edge_Trim_Stat_No @! 
+3 JUMP ;
+: 33_288
+1 LINE.NUM 1 }Mapping_Table_1_Float TABLE@ 1 }Mapping_Table_1 FTABLE! 
+2 LINE.NUM 2 }Mapping_Table_1_Float TABLE@ 2 }Mapping_Table_1 FTABLE! 
+3 LINE.NUM 3 }Mapping_Table_1_Float TABLE@ 3 }Mapping_Table_1 FTABLE! 
+4 LINE.NUM 4 }Mapping_Table_1_Float TABLE@ 4 }Mapping_Table_1 FTABLE! 
+5 LINE.NUM 5 }Mapping_Table_1_Float TABLE@ 5 }Mapping_Table_1 FTABLE! 
+6 LINE.NUM 6 }Mapping_Table_1_Float TABLE@ 6 }Mapping_Table_1 FTABLE! 
+7 LINE.NUM 7 }Mapping_Table_1_Float TABLE@ 7 }Mapping_Table_1 FTABLE! 
+8 LINE.NUM 8 }Mapping_Table_1_Float TABLE@ 8 }Mapping_Table_1 FTABLE! 
+9 LINE.NUM 9 }Mapping_Table_1_Float TABLE@ 9 }Mapping_Table_1 FTABLE! 
+10 LINE.NUM 10 }Mapping_Table_1_Float TABLE@ 10 }Mapping_Table_1 FTABLE! 
+11 LINE.NUM 11 }Mapping_Table_1_Float TABLE@ 11 }Mapping_Table_1 FTABLE! 
+12 LINE.NUM 12 }Mapping_Table_1_Float TABLE@ 12 }Mapping_Table_1 FTABLE! 
+13 LINE.NUM 13 }Mapping_Table_1_Float TABLE@ 13 }Mapping_Table_1 FTABLE! 
+14 LINE.NUM 14 }Mapping_Table_1_Float TABLE@ 14 }Mapping_Table_1 FTABLE! 
+15 LINE.NUM 15 }Mapping_Table_1_Float TABLE@ 15 }Mapping_Table_1 FTABLE! 
+16 LINE.NUM 16 }Mapping_Table_1_Float TABLE@ 16 }Mapping_Table_1 FTABLE! 
+17 LINE.NUM 17 }Mapping_Table_1_Float TABLE@ 17 }Mapping_Table_1 FTABLE! 
+18 LINE.NUM 18 }Mapping_Table_1_Float TABLE@ 18 }Mapping_Table_1 FTABLE! 
+19 LINE.NUM 19 }Mapping_Table_1_Float TABLE@ 19 }Mapping_Table_1 FTABLE! 
+20 LINE.NUM 20 }Mapping_Table_1_Float TABLE@ 20 }Mapping_Table_1 FTABLE! 
+21 LINE.NUM 21 }Mapping_Table_1_Float TABLE@ 21 }Mapping_Table_1 FTABLE! 
+22 LINE.NUM 22 }Mapping_Table_1_Float TABLE@ 22 }Mapping_Table_1 FTABLE! 
+23 LINE.NUM 23 }Mapping_Table_1_Float TABLE@ 23 }Mapping_Table_1 FTABLE! 
+24 LINE.NUM 24 }Mapping_Table_1_Float TABLE@ 24 }Mapping_Table_1 FTABLE! 
+25 LINE.NUM 25 }Mapping_Table_1_Float TABLE@ 25 }Mapping_Table_1 FTABLE! 
+26 LINE.NUM 26 }Mapping_Table_1_Float TABLE@ 26 }Mapping_Table_1 FTABLE! 
+27 LINE.NUM 27 }Mapping_Table_1_Float TABLE@ 27 }Mapping_Table_1 FTABLE! 
+28 LINE.NUM 28 }Mapping_Table_1_Float TABLE@ 28 }Mapping_Table_1 FTABLE! 
+29 LINE.NUM 29 }Mapping_Table_1_Float TABLE@ 29 }Mapping_Table_1 FTABLE! 
+30 LINE.NUM 30 }Mapping_Table_1_Float TABLE@ 30 }Mapping_Table_1 FTABLE! 
+31 LINE.NUM 31 }Mapping_Table_1_Float TABLE@ 31 }Mapping_Table_1 FTABLE! 
+32 LINE.NUM 32 }Mapping_Table_1_Float TABLE@ 32 }Mapping_Table_1 FTABLE! 
+33 LINE.NUM 33 }Mapping_Table_1_Float TABLE@ 33 }Mapping_Table_1 FTABLE! 
+34 LINE.NUM 34 }Mapping_Table_1_Float TABLE@ 34 }Mapping_Table_1 FTABLE! 
+35 LINE.NUM 35 }Mapping_Table_1_Float TABLE@ 35 }Mapping_Table_1 FTABLE! 
+36 LINE.NUM 36 }Mapping_Table_1_Float TABLE@ 36 }Mapping_Table_1 FTABLE! 
+37 LINE.NUM 37 }Mapping_Table_1_Float TABLE@ 37 }Mapping_Table_1 FTABLE! 
+38 LINE.NUM 38 }Mapping_Table_1_Float TABLE@ 38 }Mapping_Table_1 FTABLE! 
+39 LINE.NUM 39 }Mapping_Table_1_Float TABLE@ 39 }Mapping_Table_1 FTABLE! 
+40 LINE.NUM 40 }Mapping_Table_1_Float TABLE@ 40 }Mapping_Table_1 FTABLE! 
+41 LINE.NUM 41 }Mapping_Table_1_Float TABLE@ 41 }Mapping_Table_1 FTABLE! 
+42 LINE.NUM 42 }Mapping_Table_1_Float TABLE@ 42 }Mapping_Table_1 FTABLE! 
+43 LINE.NUM 43 }Mapping_Table_1_Float TABLE@ 43 }Mapping_Table_1 FTABLE! 
+44 LINE.NUM 44 }Mapping_Table_1_Float TABLE@ 44 }Mapping_Table_1 FTABLE! 
+45 LINE.NUM 45 }Mapping_Table_1_Float TABLE@ 45 }Mapping_Table_1 FTABLE! 
+46 LINE.NUM 46 }Mapping_Table_1_Float TABLE@ 46 }Mapping_Table_1 FTABLE! 
+47 LINE.NUM 47 }Mapping_Table_1_Float TABLE@ 47 }Mapping_Table_1 FTABLE! 
+48 LINE.NUM 48 }Mapping_Table_1_Float TABLE@ 48 }Mapping_Table_1 FTABLE! 
+49 LINE.NUM 49 }Mapping_Table_1_Float TABLE@ 49 }Mapping_Table_1 FTABLE! 
+50 LINE.NUM 50 }Mapping_Table_1_Float TABLE@ 50 }Mapping_Table_1 FTABLE! 
+51 LINE.NUM 51 }Mapping_Table_1_Float TABLE@ 51 }Mapping_Table_1 FTABLE! 
+52 LINE.NUM 52 }Mapping_Table_1_Float TABLE@ 52 }Mapping_Table_1 FTABLE! 
+53 LINE.NUM 53 }Mapping_Table_1_Float TABLE@ 53 }Mapping_Table_1 FTABLE! 
+54 LINE.NUM 54 }Mapping_Table_1_Float TABLE@ 54 }Mapping_Table_1 FTABLE! 
+55 LINE.NUM 55 }Mapping_Table_1_Float TABLE@ 55 }Mapping_Table_1 FTABLE! 
+56 LINE.NUM 56 }Mapping_Table_1_Float TABLE@ 56 }Mapping_Table_1 FTABLE! 
+57 LINE.NUM 57 }Mapping_Table_1_Float TABLE@ 57 }Mapping_Table_1 FTABLE! 
+58 LINE.NUM 58 }Mapping_Table_1_Float TABLE@ 58 }Mapping_Table_1 FTABLE! 
+59 LINE.NUM 59 }Mapping_Table_1_Float TABLE@ 59 }Mapping_Table_1 FTABLE! 
+60 LINE.NUM 60 }Mapping_Table_1_Float TABLE@ 60 }Mapping_Table_1 FTABLE! 
+61 LINE.NUM 61 }Mapping_Table_1_Float TABLE@ 61 }Mapping_Table_1 FTABLE! 
+62 LINE.NUM 62 }Mapping_Table_1_Float TABLE@ 62 }Mapping_Table_1 FTABLE! 
+63 LINE.NUM 63 }Mapping_Table_1_Float TABLE@ 63 }Mapping_Table_1 FTABLE! 
+64 LINE.NUM 64 }Mapping_Table_1_Float TABLE@ 64 }Mapping_Table_1 FTABLE! 
+65 LINE.NUM 65 }Mapping_Table_1_Float TABLE@ 65 }Mapping_Table_1 FTABLE! 
+66 LINE.NUM 66 }Mapping_Table_1_Float TABLE@ 66 }Mapping_Table_1 FTABLE! 
+67 LINE.NUM 67 }Mapping_Table_1_Float TABLE@ 67 }Mapping_Table_1 FTABLE! 
+68 LINE.NUM 68 }Mapping_Table_1_Float TABLE@ 68 }Mapping_Table_1 FTABLE! 
+69 LINE.NUM 69 }Mapping_Table_1_Float TABLE@ 69 }Mapping_Table_1 FTABLE! 
+70 LINE.NUM 70 }Mapping_Table_1_Float TABLE@ 70 }Mapping_Table_1 FTABLE! 
+71 LINE.NUM 71 }Mapping_Table_1_Float TABLE@ 71 }Mapping_Table_1 FTABLE! 
+72 LINE.NUM 72 }Mapping_Table_1_Float TABLE@ 72 }Mapping_Table_1 FTABLE! 
+73 LINE.NUM 73 }Mapping_Table_1_Float TABLE@ 73 }Mapping_Table_1 FTABLE! 
+74 LINE.NUM 74 }Mapping_Table_1_Float TABLE@ 74 }Mapping_Table_1 FTABLE! 
+75 LINE.NUM 75 }Mapping_Table_1_Float TABLE@ 75 }Mapping_Table_1 FTABLE! 
+76 LINE.NUM 76 }Mapping_Table_1_Float TABLE@ 76 }Mapping_Table_1 FTABLE! 
+121 LINE.NUM 0 ^Loop_Counter_CD @! 
+123 LINE.NUM BEGIN ^Loop_Counter_CD @@F ^Left_Deckle @@ F<= WHILE 
+124 LINE.NUM 0 ^Loop_Counter_CD @@ }Mapping_Table_Profile_Temp TABLE! 
+125 LINE.NUM ^Loop_Counter_CD  1+@! 
+126 LINE.NUM REPEAT 
+128 LINE.NUM 0 ^Loop_Counter_CD @@ }Mapping_Table_Profile_Temp TABLE! 
+130 LINE.NUM ^Left_Deckle @@ 1 I>F F+ ^Loop_Counter_CD_1 F@! 
+132 LINE.NUM BEGIN ^Loop_Counter_CD @@ ^Number_Of_Bolts @@ <= WHILE 
+133 LINE.NUM ^Loop_Counter_CD_1 @@ }Mapping_Table_1 TABLE@ 2 *  ^Loop_Counter_CD @@ }Mapping_Table_Profile_Temp TABLE! 
+134 LINE.NUM ^Loop_Counter_CD_1  1+@! 
+135 LINE.NUM ^Loop_Counter_CD  1+@! 
+136 LINE.NUM REPEAT 
+138 LINE.NUM ^Number_Of_Bolts_Active @@ 1 + I>F ^Left_Deckle @@ F+ ^Loop_Counter_CD F@! 
+140 LINE.NUM BEGIN ^Loop_Counter_CD @@ 92 <= WHILE 
+141 LINE.NUM 900 ^Loop_Counter_CD @@ }Mapping_Table_Profile_Temp TABLE! 
+142 LINE.NUM ^Loop_Counter_CD  1+@! 
+143 LINE.NUM REPEAT 
+145 LINE.NUM ^Number_Of_Bolts_Active @@F ^Left_Deckle @@ F+ ^Number_Of_Bolts_Active_1 F@! 
+22 JUMP ;
+: 33_289
+1 LINE.NUM ^Number_Of_Bolts @@F ^Left_Deckle @@ F- ^Right_Deckle @@ F- ^Number_Of_Bolts_Active F@! 
+2 LINE.NUM ^Die_Width_Inches @@ ^Number_Of_Bolts_Active @@F F/ ^Edge_6 @! 
+5 LINE.NUM 0 ^Loop_Counter_CD @! 
+6 LINE.NUM BEGIN ^Loop_Counter_CD @@F ^Number_Of_Bolts_Active @@F ^Left_Deckle @@ F+ F<= WHILE 
+7 LINE.NUM ^Edge_6 @@ ^Loop_Counter_CD @@ }Shrinkage_Table_1 TABLE! 
+8 LINE.NUM ^Loop_Counter_CD  1+@! 
+9 LINE.NUM REPEAT 
+11 LINE.NUM 0 ^Loop_Counter_CD @! 
+12 LINE.NUM BEGIN ^Loop_Counter_CD @@F ^Left_Deckle @@ F<= WHILE 
+13 LINE.NUM 0 I>F ^Loop_Counter_CD @@ }Shrinkage_Table_1 TABLE! 
+14 LINE.NUM ^Loop_Counter_CD  1+@! 
+15 LINE.NUM REPEAT 
+17 LINE.NUM 0 I>F ^Left_Deckle @@I }Shrinkage_Table_1 TABLE! 
+18 LINE.NUM 1 }Shrinkage_Table_4 TABLE@ ^Left_Deckle @@ 1 I>F F+ F>I }Shrinkage_Table_1 TABLE! 
+19 LINE.NUM 2 }Shrinkage_Table_4 TABLE@ ^Left_Deckle @@ 2 I>F F+ F>I }Shrinkage_Table_1 TABLE! 
+20 LINE.NUM 3 }Shrinkage_Table_4 TABLE@ ^Left_Deckle @@ 3 I>F F+ F>I }Shrinkage_Table_1 TABLE! 
+21 LINE.NUM 4 }Shrinkage_Table_4 TABLE@ ^Left_Deckle @@ 4 I>F F+ F>I }Shrinkage_Table_1 TABLE! 
+22 LINE.NUM 5 }Shrinkage_Table_4 TABLE@ ^Left_Deckle @@ 5 I>F F+ F>I }Shrinkage_Table_1 TABLE! 
+23 LINE.NUM 6 }Shrinkage_Table_4 TABLE@ ^Left_Deckle @@ 6 I>F F+ F>I }Shrinkage_Table_1 TABLE! 
+24 LINE.NUM 7 }Shrinkage_Table_4 TABLE@ ^Left_Deckle @@ 7 I>F F+ F>I }Shrinkage_Table_1 TABLE! 
+25 LINE.NUM 8 }Shrinkage_Table_4 TABLE@ ^Left_Deckle @@ 8 I>F F+ F>I }Shrinkage_Table_1 TABLE! 
+26 LINE.NUM 9 }Shrinkage_Table_4 TABLE@ ^Left_Deckle @@ 9 I>F F+ F>I }Shrinkage_Table_1 TABLE! 
+27 LINE.NUM 10 }Shrinkage_Table_4 TABLE@ ^Left_Deckle @@ 10 I>F F+ F>I }Shrinkage_Table_1 TABLE! 
+30 LINE.NUM 20 }Shrinkage_Table_4 TABLE@ ^Left_Deckle @@ ^Number_Of_Bolts_Active @@F F+ 9 I>F F- F>I }Shrinkage_Table_1 TABLE! 
+31 LINE.NUM 19 }Shrinkage_Table_4 TABLE@ ^Left_Deckle @@ ^Number_Of_Bolts_Active @@F F+ 8 I>F F- F>I }Shrinkage_Table_1 TABLE! 
+32 LINE.NUM 18 }Shrinkage_Table_4 TABLE@ ^Left_Deckle @@ ^Number_Of_Bolts_Active @@F F+ 7 I>F F- F>I }Shrinkage_Table_1 TABLE! 
+33 LINE.NUM 17 }Shrinkage_Table_4 TABLE@ ^Left_Deckle @@ ^Number_Of_Bolts_Active @@F F+ 6 I>F F- F>I }Shrinkage_Table_1 TABLE! 
+34 LINE.NUM 16 }Shrinkage_Table_4 TABLE@ ^Left_Deckle @@ ^Number_Of_Bolts_Active @@F F+ 5 I>F F- F>I }Shrinkage_Table_1 TABLE! 
+35 LINE.NUM 15 }Shrinkage_Table_4 TABLE@ ^Left_Deckle @@ ^Number_Of_Bolts_Active @@F F+ 4 I>F F- F>I }Shrinkage_Table_1 TABLE! 
+36 LINE.NUM 14 }Shrinkage_Table_4 TABLE@ ^Left_Deckle @@ ^Number_Of_Bolts_Active @@F F+ 3 I>F F- F>I }Shrinkage_Table_1 TABLE! 
+37 LINE.NUM 13 }Shrinkage_Table_4 TABLE@ ^Left_Deckle @@ ^Number_Of_Bolts_Active @@F F+ 2 I>F F- F>I }Shrinkage_Table_1 TABLE! 
+38 LINE.NUM 12 }Shrinkage_Table_4 TABLE@ ^Left_Deckle @@ ^Number_Of_Bolts_Active @@F F+ 1 I>F F- F>I }Shrinkage_Table_1 TABLE! 
+39 LINE.NUM 11 }Shrinkage_Table_4 TABLE@ ^Left_Deckle @@ ^Number_Of_Bolts_Active @@F F+ 0 I>F F- F>I }Shrinkage_Table_1 TABLE! 
+42 LINE.NUM ^Left_Deckle @@ ^Number_Of_Bolts_Active @@F F+ 1 I>F F+ ^Loop_Counter_CD F@! 
+43 LINE.NUM BEGIN ^Loop_Counter_CD @@ 90 <= WHILE 
+44 LINE.NUM 0 I>F ^Loop_Counter_CD @@ }Shrinkage_Table_1 TABLE! 
+45 LINE.NUM ^Loop_Counter_CD  1+@! 
+46 LINE.NUM REPEAT 
+49 LINE.NUM 1 ^Loop_Counter_CD @! 
+50 LINE.NUM 0 I>F ^Shrinkage_Factor_1 @! 
+52 LINE.NUM BEGIN ^Loop_Counter_CD @@F ^Left_Deckle @@ ^Number_Of_Bolts_Active @@F F+ F<= WHILE 
+53 LINE.NUM ^Loop_Counter_CD @@ }Shrinkage_Table_1 TABLE@ ^Shrinkage_Factor_1 @@ F+ ^Shrinkage_Factor_1 @! 
+54 LINE.NUM ^Loop_Counter_CD  1+@! 
+55 LINE.NUM REPEAT 
+57 LINE.NUM ^Web_Width @@ ^Shrinkage_Factor_1 @@ F/ ^Shrinkage_Factor_2 @! 
+59 LINE.NUM 1 ^Loop_Counter_CD @! 
+61 LINE.NUM BEGIN ^Loop_Counter_CD @@F ^Left_Deckle @@ ^Number_Of_Bolts_Active @@F F+ F<= WHILE 
+62 LINE.NUM ^Loop_Counter_CD @@ }Shrinkage_Table_1 TABLE@ ^Shrinkage_Factor_2 @@ F* ^Loop_Counter_CD @@ }Shrinkage_Table_2 TABLE! 
+63 LINE.NUM ^Loop_Counter_CD  1+@! 
+64 LINE.NUM REPEAT 
+0 JUMP ;
+: 33_290
+1 LINE.NUM 400 I>F ^Web_Width @@ F/ ^Data_Width @! 
+2 LINE.NUM 1 ^Loop_Counter_CD @! 
+4 LINE.NUM BEGIN ^Loop_Counter_CD @@F ^Left_Deckle @@ ^Number_Of_Bolts_Active @@F F+ F<= WHILE 
+5 LINE.NUM ^Loop_Counter_CD @@ }Shrinkage_Table_2 TABLE@ ^Data_Width @@ F* ^Loop_Counter_CD @@ }Shrinkage_Table_3 TABLE! 
+6 LINE.NUM ^Loop_Counter_CD  1+@! 
+7 LINE.NUM REPEAT 
+10 LINE.NUM 0 I>F 0 }Mapping_Table_1_Float TABLE! 
+11 LINE.NUM 1 }Shrinkage_Table_3 TABLE@ 1 }Mapping_Table_1_Float TABLE! 
+13 LINE.NUM 2 ^Loop_Counter_CD @! 
+15 LINE.NUM BEGIN ^Loop_Counter_CD @@F ^Left_Deckle @@ ^Number_Of_Bolts_Active @@F F+ F<= WHILE 
+16 LINE.NUM ^Loop_Counter_CD @@ }Shrinkage_Table_3 TABLE@ ^Loop_Counter_CD @@ 1 -  }Mapping_Table_1_Float TABLE@ F+ ^Loop_Counter_CD @@ }Mapping_Table_1_Float TABLE! 
+17 LINE.NUM ^Loop_Counter_CD  1+@! 
+18 LINE.NUM REPEAT 
+21 LINE.NUM 0 I>F 0 }Mapping_Table_1_Float TABLE! 
+22 LINE.NUM 400 I>F ^Left_Deckle @@ ^Number_Of_Bolts_Active @@F F+ F>I }Mapping_Table_1_Float TABLE! 
+-3 JUMP ;
+: 33_314
+2 LINE.NUM ~Shutter_Insert @@I 1 = IF 
+3 LINE.NUM 1 ~Red_Lamp @! 
+4 LINE.NUM 0 ~Green_Lamp @! 
+5 LINE.NUM ELSE 
+6 LINE.NUM 0 ~Red_Lamp @! 
+7 LINE.NUM 1 ~Green_Lamp @! 
+8 LINE.NUM THEN 
+1 JUMP ;
+: 33_321
+1 LINE.NUM 400 I>F ^Web_Width @@ F/ ^Data_Width @! 
+2 LINE.NUM 1 ^Loop_Counter_CD @! 
+4 LINE.NUM BEGIN ^Loop_Counter_CD @@F ^Left_Deckle @@ ^Number_Of_Bolts_Active @@F F+ F<= WHILE 
+5 LINE.NUM ^Loop_Counter_CD @@ }Shrinkage_Table_2 TABLE@ ^Data_Width @@ F* ^Loop_Counter_CD @@ }Shrinkage_Table_3 TABLE! 
+6 LINE.NUM ^Loop_Counter_CD  1+@! 
+7 LINE.NUM REPEAT 
+10 LINE.NUM 0 I>F 0 }Mapping_Table_1_Float TABLE! 
+11 LINE.NUM 1 }Shrinkage_Table_3 TABLE@ 1 }Mapping_Table_1_Float TABLE! 
+13 LINE.NUM 2 ^Loop_Counter_CD @! 
+15 LINE.NUM BEGIN ^Loop_Counter_CD @@F ^Left_Deckle @@ ^Number_Of_Bolts_Active @@F F+ F<= WHILE 
+16 LINE.NUM ^Loop_Counter_CD @@ }Shrinkage_Table_3 TABLE@ ^Loop_Counter_CD @@ 1 -  }Mapping_Table_1_Float TABLE@ F+ ^Loop_Counter_CD @@ }Mapping_Table_1_Float TABLE! 
+17 LINE.NUM ^Loop_Counter_CD  1+@! 
+18 LINE.NUM REPEAT 
+21 LINE.NUM 0 I>F 0 }Mapping_Table_1_Float TABLE! 
+22 LINE.NUM 400 I>F ^Left_Deckle @@ ^Number_Of_Bolts_Active @@F F+ F>I }Mapping_Table_1_Float TABLE! 
+1 JUMP ;
+: 33_322
+1 LINE.NUM ^Auto_Edge @@ 1 I>F F= IF 
+1 LINE.NUM ^Rev_Edge_Inches_Temp @@ ^Fwd_Edge_Inches_Temp @@ F- ^Web_Width @! 
+1 LINE.NUM ELSE 
+1 LINE.NUM ^REV_Edge_Inches @@ ^FWD_Edge_Inches @@ F- ^Web_Width @! 
+1 LINE.NUM THEN 
+2 LINE.NUM ^REV_Edge_Inches @@ ^FWD_Edge_Inches @@ F- 2 I>F F/ ^Number_Of_Bolts_Active F@! 
+3 LINE.NUM 2 I>F ^Edge_6 @! 
+6 LINE.NUM 0 ^Loop_Counter_CD @! 
+7 LINE.NUM BEGIN ^Loop_Counter_CD @@F ^Number_Of_Bolts_Active @@F ^Left_Deckle @@ F+ F<= WHILE 
+8 LINE.NUM ^Edge_6 @@ ^Loop_Counter_CD @@ }Shrinkage_Table_1 TABLE! 
+9 LINE.NUM ^Loop_Counter_CD  1+@! 
+10 LINE.NUM REPEAT 
+12 LINE.NUM 0 ^Loop_Counter_CD @! 
+13 LINE.NUM BEGIN ^Loop_Counter_CD @@F ^Left_Deckle @@ F<= WHILE 
+14 LINE.NUM 0 I>F ^Loop_Counter_CD @@ }Shrinkage_Table_1 TABLE! 
+15 LINE.NUM ^Loop_Counter_CD  1+@! 
+16 LINE.NUM REPEAT 
+43 LINE.NUM ^Left_Deckle @@ ^Number_Of_Bolts_Active @@F F+ 1 I>F F+ ^Loop_Counter_CD F@! 
+44 LINE.NUM BEGIN ^Loop_Counter_CD @@ 90 <= WHILE 
+45 LINE.NUM 0 I>F ^Loop_Counter_CD @@ }Shrinkage_Table_1 TABLE! 
+46 LINE.NUM ^Loop_Counter_CD  1+@! 
+47 LINE.NUM REPEAT 
+50 LINE.NUM 1 ^Loop_Counter_CD @! 
+51 LINE.NUM 0 I>F ^Shrinkage_Factor_1 @! 
+53 LINE.NUM BEGIN ^Loop_Counter_CD @@F ^Left_Deckle @@ ^Number_Of_Bolts_Active @@F F+ F<= WHILE 
+54 LINE.NUM ^Loop_Counter_CD @@ }Shrinkage_Table_1 TABLE@ ^Shrinkage_Factor_1 @@ F+ ^Shrinkage_Factor_1 @! 
+55 LINE.NUM ^Loop_Counter_CD  1+@! 
+56 LINE.NUM REPEAT 
+58 LINE.NUM ^Web_Width @@ ^Shrinkage_Factor_1 @@ F/ ^Shrinkage_Factor_2 @! 
+60 LINE.NUM 1 ^Loop_Counter_CD @! 
+62 LINE.NUM BEGIN ^Loop_Counter_CD @@F ^Left_Deckle @@ ^Number_Of_Bolts_Active @@F F+ F<= WHILE 
+63 LINE.NUM ^Loop_Counter_CD @@ }Shrinkage_Table_1 TABLE@ ^Shrinkage_Factor_2 @@ F* ^Loop_Counter_CD @@ }Shrinkage_Table_2 TABLE! 
+64 LINE.NUM ^Loop_Counter_CD  1+@! 
+65 LINE.NUM REPEAT 
+-2 JUMP ;
+: 33_323
+1 LINE.NUM 1 }Mapping_Table_1_Float TABLE@ 1 }Mapping_Table_1 FTABLE! 
+2 LINE.NUM 2 }Mapping_Table_1_Float TABLE@ 2 }Mapping_Table_1 FTABLE! 
+3 LINE.NUM 3 }Mapping_Table_1_Float TABLE@ 3 }Mapping_Table_1 FTABLE! 
+4 LINE.NUM 4 }Mapping_Table_1_Float TABLE@ 4 }Mapping_Table_1 FTABLE! 
+5 LINE.NUM 5 }Mapping_Table_1_Float TABLE@ 5 }Mapping_Table_1 FTABLE! 
+6 LINE.NUM 6 }Mapping_Table_1_Float TABLE@ 6 }Mapping_Table_1 FTABLE! 
+7 LINE.NUM 7 }Mapping_Table_1_Float TABLE@ 7 }Mapping_Table_1 FTABLE! 
+8 LINE.NUM 8 }Mapping_Table_1_Float TABLE@ 8 }Mapping_Table_1 FTABLE! 
+9 LINE.NUM 9 }Mapping_Table_1_Float TABLE@ 9 }Mapping_Table_1 FTABLE! 
+10 LINE.NUM 10 }Mapping_Table_1_Float TABLE@ 10 }Mapping_Table_1 FTABLE! 
+11 LINE.NUM 11 }Mapping_Table_1_Float TABLE@ 11 }Mapping_Table_1 FTABLE! 
+12 LINE.NUM 12 }Mapping_Table_1_Float TABLE@ 12 }Mapping_Table_1 FTABLE! 
+13 LINE.NUM 13 }Mapping_Table_1_Float TABLE@ 13 }Mapping_Table_1 FTABLE! 
+14 LINE.NUM 14 }Mapping_Table_1_Float TABLE@ 14 }Mapping_Table_1 FTABLE! 
+15 LINE.NUM 15 }Mapping_Table_1_Float TABLE@ 15 }Mapping_Table_1 FTABLE! 
+16 LINE.NUM 16 }Mapping_Table_1_Float TABLE@ 16 }Mapping_Table_1 FTABLE! 
+17 LINE.NUM 17 }Mapping_Table_1_Float TABLE@ 17 }Mapping_Table_1 FTABLE! 
+18 LINE.NUM 18 }Mapping_Table_1_Float TABLE@ 18 }Mapping_Table_1 FTABLE! 
+19 LINE.NUM 19 }Mapping_Table_1_Float TABLE@ 19 }Mapping_Table_1 FTABLE! 
+20 LINE.NUM 20 }Mapping_Table_1_Float TABLE@ 20 }Mapping_Table_1 FTABLE! 
+21 LINE.NUM 21 }Mapping_Table_1_Float TABLE@ 21 }Mapping_Table_1 FTABLE! 
+22 LINE.NUM 22 }Mapping_Table_1_Float TABLE@ 22 }Mapping_Table_1 FTABLE! 
+23 LINE.NUM 23 }Mapping_Table_1_Float TABLE@ 23 }Mapping_Table_1 FTABLE! 
+24 LINE.NUM 24 }Mapping_Table_1_Float TABLE@ 24 }Mapping_Table_1 FTABLE! 
+25 LINE.NUM 25 }Mapping_Table_1_Float TABLE@ 25 }Mapping_Table_1 FTABLE! 
+26 LINE.NUM 26 }Mapping_Table_1_Float TABLE@ 26 }Mapping_Table_1 FTABLE! 
+27 LINE.NUM 27 }Mapping_Table_1_Float TABLE@ 27 }Mapping_Table_1 FTABLE! 
+28 LINE.NUM 28 }Mapping_Table_1_Float TABLE@ 28 }Mapping_Table_1 FTABLE! 
+29 LINE.NUM 29 }Mapping_Table_1_Float TABLE@ 29 }Mapping_Table_1 FTABLE! 
+30 LINE.NUM 30 }Mapping_Table_1_Float TABLE@ 30 }Mapping_Table_1 FTABLE! 
+31 LINE.NUM 31 }Mapping_Table_1_Float TABLE@ 31 }Mapping_Table_1 FTABLE! 
+32 LINE.NUM 32 }Mapping_Table_1_Float TABLE@ 32 }Mapping_Table_1 FTABLE! 
+33 LINE.NUM 33 }Mapping_Table_1_Float TABLE@ 33 }Mapping_Table_1 FTABLE! 
+34 LINE.NUM 34 }Mapping_Table_1_Float TABLE@ 34 }Mapping_Table_1 FTABLE! 
+35 LINE.NUM 35 }Mapping_Table_1_Float TABLE@ 35 }Mapping_Table_1 FTABLE! 
+36 LINE.NUM 36 }Mapping_Table_1_Float TABLE@ 36 }Mapping_Table_1 FTABLE! 
+37 LINE.NUM 37 }Mapping_Table_1_Float TABLE@ 37 }Mapping_Table_1 FTABLE! 
+38 LINE.NUM 38 }Mapping_Table_1_Float TABLE@ 38 }Mapping_Table_1 FTABLE! 
+39 LINE.NUM 39 }Mapping_Table_1_Float TABLE@ 39 }Mapping_Table_1 FTABLE! 
+40 LINE.NUM 40 }Mapping_Table_1_Float TABLE@ 40 }Mapping_Table_1 FTABLE! 
+41 LINE.NUM 41 }Mapping_Table_1_Float TABLE@ 41 }Mapping_Table_1 FTABLE! 
+42 LINE.NUM 42 }Mapping_Table_1_Float TABLE@ 42 }Mapping_Table_1 FTABLE! 
+43 LINE.NUM 43 }Mapping_Table_1_Float TABLE@ 43 }Mapping_Table_1 FTABLE! 
+44 LINE.NUM 44 }Mapping_Table_1_Float TABLE@ 44 }Mapping_Table_1 FTABLE! 
+45 LINE.NUM 45 }Mapping_Table_1_Float TABLE@ 45 }Mapping_Table_1 FTABLE! 
+46 LINE.NUM 46 }Mapping_Table_1_Float TABLE@ 46 }Mapping_Table_1 FTABLE! 
+47 LINE.NUM 47 }Mapping_Table_1_Float TABLE@ 47 }Mapping_Table_1 FTABLE! 
+48 LINE.NUM 48 }Mapping_Table_1_Float TABLE@ 48 }Mapping_Table_1 FTABLE! 
+49 LINE.NUM 49 }Mapping_Table_1_Float TABLE@ 49 }Mapping_Table_1 FTABLE! 
+50 LINE.NUM 50 }Mapping_Table_1_Float TABLE@ 50 }Mapping_Table_1 FTABLE! 
+51 LINE.NUM 51 }Mapping_Table_1_Float TABLE@ 51 }Mapping_Table_1 FTABLE! 
+52 LINE.NUM 52 }Mapping_Table_1_Float TABLE@ 52 }Mapping_Table_1 FTABLE! 
+53 LINE.NUM 53 }Mapping_Table_1_Float TABLE@ 53 }Mapping_Table_1 FTABLE! 
+54 LINE.NUM 54 }Mapping_Table_1_Float TABLE@ 54 }Mapping_Table_1 FTABLE! 
+55 LINE.NUM 55 }Mapping_Table_1_Float TABLE@ 55 }Mapping_Table_1 FTABLE! 
+56 LINE.NUM 56 }Mapping_Table_1_Float TABLE@ 56 }Mapping_Table_1 FTABLE! 
+57 LINE.NUM 57 }Mapping_Table_1_Float TABLE@ 57 }Mapping_Table_1 FTABLE! 
+58 LINE.NUM 58 }Mapping_Table_1_Float TABLE@ 58 }Mapping_Table_1 FTABLE! 
+59 LINE.NUM 59 }Mapping_Table_1_Float TABLE@ 59 }Mapping_Table_1 FTABLE! 
+60 LINE.NUM 60 }Mapping_Table_1_Float TABLE@ 60 }Mapping_Table_1 FTABLE! 
+61 LINE.NUM 61 }Mapping_Table_1_Float TABLE@ 61 }Mapping_Table_1 FTABLE! 
+62 LINE.NUM 62 }Mapping_Table_1_Float TABLE@ 62 }Mapping_Table_1 FTABLE! 
+63 LINE.NUM 63 }Mapping_Table_1_Float TABLE@ 63 }Mapping_Table_1 FTABLE! 
+64 LINE.NUM 64 }Mapping_Table_1_Float TABLE@ 64 }Mapping_Table_1 FTABLE! 
+65 LINE.NUM 65 }Mapping_Table_1_Float TABLE@ 65 }Mapping_Table_1 FTABLE! 
+66 LINE.NUM 66 }Mapping_Table_1_Float TABLE@ 66 }Mapping_Table_1 FTABLE! 
+67 LINE.NUM 67 }Mapping_Table_1_Float TABLE@ 67 }Mapping_Table_1 FTABLE! 
+68 LINE.NUM 68 }Mapping_Table_1_Float TABLE@ 68 }Mapping_Table_1 FTABLE! 
+69 LINE.NUM 69 }Mapping_Table_1_Float TABLE@ 69 }Mapping_Table_1 FTABLE! 
+70 LINE.NUM 70 }Mapping_Table_1_Float TABLE@ 70 }Mapping_Table_1 FTABLE! 
+71 LINE.NUM 0 ^Loop_Counter_CD @! 
+73 LINE.NUM BEGIN ^Loop_Counter_CD @@F ^Left_Deckle @@ F<= WHILE 
+74 LINE.NUM 0 ^Loop_Counter_CD @@ }Mapping_Table_Profile_Temp TABLE! 
+75 LINE.NUM ^Loop_Counter_CD  1+@! 
+76 LINE.NUM REPEAT 
+78 LINE.NUM 0 ^Loop_Counter_CD @@ }Mapping_Table_Profile_Temp TABLE! 
+80 LINE.NUM ^Left_Deckle @@ 1 I>F F+ ^Loop_Counter_CD_1 F@! 
+82 LINE.NUM BEGIN ^Loop_Counter_CD @@ ^Number_Of_Bolts @@ <= WHILE 
+83 LINE.NUM ^Loop_Counter_CD_1 @@ }Mapping_Table_1 TABLE@ 2 *  ^Loop_Counter_CD @@ }Mapping_Table_Profile_Temp TABLE! 
+84 LINE.NUM ^Loop_Counter_CD_1  1+@! 
+85 LINE.NUM ^Loop_Counter_CD  1+@! 
+86 LINE.NUM REPEAT 
+88 LINE.NUM ^Number_Of_Bolts_Active @@ 1 + I>F ^Left_Deckle @@ F+ ^Loop_Counter_CD F@! 
+90 LINE.NUM BEGIN ^Loop_Counter_CD @@ 92 <= WHILE 
+91 LINE.NUM 900 ^Loop_Counter_CD @@ }Mapping_Table_Profile_Temp TABLE! 
+92 LINE.NUM ^Loop_Counter_CD  1+@! 
+93 LINE.NUM REPEAT 
+95 LINE.NUM ^Number_Of_Bolts_Active @@F ^Left_Deckle @@ F+ ^Number_Of_Bolts_Active_1 F@! 
+97 LINE.NUM }Mapping_Table_Profile_Temp 0 }Mapping_Table_Profile 0 100  CopyTable  
+0 JUMP ;
+: 33_345
+1 LINE.NUM ^Scan_SPD_FWD @@ 1.50010002e+000 F= IF 
+1 LINE.NUM 1 ^Bad_Recipe_Alarm @! 
+2 LINE.NUM ELSE 
+2 LINE.NUM 0 ^Bad_Recipe_Alarm @! 
+2 LINE.NUM THEN 
+5 LINE.NUM ^D3 @@ ^D4 @! 
+18 JUMP ;
+: 33_13
+TRUE
+
+1 LINE.NUM
+  ^Prod_Change_Flag @@ 
+  ^ONE @@   =
+LAND
+IF -27 ELSE 14 THEN JUMP ;
+: 33_24
+TRUE
+
+1 LINE.NUM
+  ^Auto_Scan_Start @@ 
+  1    =
+LAND
+
+2 LINE.NUM
+  ^STDZ_Timer @@F 
+  ^STDZ_Interval @@   F>=
+LAND
+IF -29 ELSE -30 THEN JUMP ;
+: 33_26
+TRUE
+
+1 LINE.NUM
+  ^Stdz_Mode @@ 
+  ^ONE @@   =
+LAND
+IF -2 ELSE 0 THEN JUMP ;
+: 33_27
+TRUE
+
+1 LINE.NUM
+  ^Number_Of_Scans @@ 
+  ^Scans_2_STDZ @@   F>=
+LAND
+IF -31 ELSE -32 THEN JUMP ;
+: 33_47
+TRUE
+
+1 LINE.NUM
+ IO.ENABLED?
+LAND
+IF 0 ELSE 14 THEN JUMP ;
+: 33_48
+TRUE
+
+1 LINE.NUM
+ IO.ENABLED?
+LAND
+IF -30 ELSE -35 THEN JUMP ;
+: 33_87
+TRUE
+
+1 LINE.NUM
+  ^OffSheet_Latch @@ 
+  ^ONE @@   =
+LAND
+IF 3 ELSE -27 THEN JUMP ;
+: 33_94
+TRUE
+
+1 LINE.NUM
+  ^OnSheet_Latch @@ 
+  ^ONE @@   =
+LAND
+IF 0 ELSE -26 THEN JUMP ;
+: 33_95
+TRUE
+
+1 LINE.NUM
+  ~Off_Sheet   ?ON
+LAND
+IF -3 ELSE -30 THEN JUMP ;
+: 33_109
+TRUE
+
+1 LINE.NUM
+  ^REV_Prox_Alarm @@ 
+  ^ONE @@F   F=
+LAND
+IF 7 ELSE -8 THEN JUMP ;
+: 33_110
+TRUE
+
+1 LINE.NUM
+  ^FWD_Prox_Alarm @@ 
+  ^ONE @@F   F=
+LAND
+IF 5 ELSE -2 THEN JUMP ;
+: 33_119
+TRUE
+
+1 LINE.NUM
+  ^REV_Prox_Alarm @@ 
+  ^ONE @@F   F=
+LAND
+IF -29 ELSE -27 THEN JUMP ;
+: 33_124
+TRUE
+
+1 LINE.NUM
+  ^FWD_Prox_Alarm @@ 
+  ^ONE @@F   F=
+LAND
+IF 1 ELSE -27 THEN JUMP ;
+: 33_130
+TRUE
+
+1 LINE.NUM
+  ^Scanner_Status @@ 
+  ^TWO @@   =
+LAND
+IF -3 ELSE -31 THEN JUMP ;
+: 33_132
+TRUE
+
+1 LINE.NUM
+  ~Rev_Prox_Switch   ?ON
+LAND
+IF -2 ELSE -32 THEN JUMP ;
+: 33_133
+TRUE
+
+1 LINE.NUM
+  ~Fwd_Prox_Switch   ?ON
+LAND
+IF -4 ELSE -2 THEN JUMP ;
+: 33_139
+TRUE
+
+1 LINE.NUM
+  ~Fwd_Prox_Switch   ?ON
+LAND
+IF -8 ELSE -30 THEN JUMP ;
+: 33_144
+TRUE
+
+1 LINE.NUM
+  ~Rev_Prox_Switch   ?ON
+LAND
+IF -16 ELSE -30 THEN JUMP ;
+: 33_149
+TRUE
+
+1 LINE.NUM
+  ~On_Sheet   ?ON
+LAND
+IF -12 ELSE -38 THEN JUMP ;
+: 33_176
+TRUE
+
+1 LINE.NUM
+  ^Comm_Timer   T0=
+LAND
+IF -43 ELSE -15 THEN JUMP ;
+: 33_192
+TRUE
+
+1 LINE.NUM
+  ^Scanner_Status @@ 
+  ^TWO @@   =
+LAND
+IF 0 ELSE -17 THEN JUMP ;
+: 33_195
+TRUE
+
+1 LINE.NUM
+  ^Scanner_Moving @@F 
+  60 I>F   F>=
+LAND
+IF -32 ELSE -18 THEN JUMP ;
+T: T33
+DUMMY
+33_0
+33_2
+33_3
+33_4
+33_5
+33_15
+33_19
+33_22
+33_29
+33_30
+33_52
+33_53
+33_59
+33_84
+33_88
+33_98
+33_99
+33_120
+33_126
+33_127
+33_131
+33_138
+33_143
+33_148
+33_197
+33_237
+33_288
+33_289
+33_290
+33_314
+33_321
+33_322
+33_323
+33_345
+33_13
+33_24
+33_26
+33_27
+33_47
+33_48
+33_87
+33_94
+33_95
+33_109
+33_110
+33_119
+33_124
+33_130
+33_132
+33_133
+33_139
+33_144
+33_149
+33_176
+33_192
+33_195
+T;

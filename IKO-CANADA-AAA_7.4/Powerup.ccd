@@ -1,0 +1,38 @@
+: 0_0
+0 JUMP ;
+: 0_1
+
+1 LINE.NUM
+  &Control   START.T
+  ^Status_Trashcan @! 
+
+2 LINE.NUM
+  &Scan   START.T
+  ^Status_Trashcan @! 
+
+3 LINE.NUM
+  &Coutner_inputs   START.T
+  ^Status_Trashcan @! 
+
+4 LINE.NUM
+  &Utility   START.T
+  ^Status_Trashcan @! 
+
+5 LINE.NUM
+  &EOS_Data   START.T
+  ^Status_Trashcan @! 
+
+6 LINE.NUM
+  &One_Second   START.T
+  ^Status_Trashcan @! 
+
+7 LINE.NUM
+  &Five_Second   START.T
+  ^Status_Trashcan @! 
+0 JUMP ;
+T: T0
+DUMMY
+0_0
+0_1
+T;
+&Powerup ' T0 SETTASK
