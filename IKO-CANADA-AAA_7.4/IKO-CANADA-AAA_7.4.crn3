@@ -1013,6 +1013,7 @@ CREATE V.ARRAY
 ^TEN_mSec_Delay ,
 ^TGT_Prof_Avg ,
 ^Thickness_Alarm_ACK ,
+^thickness_Alarm_Int ,
 ^Thickness_Alarm_Silence ,
 ^Thousand_mSec_Delay ,
 ^THREE ,
@@ -2396,7 +2397,7 @@ CONFIG_PORTS
 3.0000000 ^Max_Corr_Limit @!
 0.00000000 ^Max_Corr_Limit_Flag @!
 0.00000000 ^Max_Edge @!
-2.0000000 ^Max_Error_Limit @!
+3.0000000 ^Max_Error_Limit @!
 0.00000000 ^Max_Error_Limit_Flag @!
 72.000000 ^Max_Frame_Length @!
 248400.00 ^Max_Frame_Length_1 @!
@@ -2450,7 +2451,7 @@ CONFIG_PORTS
 0.00000000 ^Proc_Var_Type @!
 0 ^Prod_Change_Flag @!
 84 ^Prof_Ctr @!
-1 ^Prof_Rev @!
+0 ^Prof_Rev @!
 0 ^Prof_TGT_Mode @!
 0 ^Profile_Display_Avg @!
 0.00000000 ^Profile_X_1 @!
@@ -2626,6 +2627,7 @@ CONFIG_PORTS
 10 ^TEN_mSec_Delay @!
 0.00000000 ^TGT_Prof_Avg @!
 0 ^Thickness_Alarm_ACK @!
+0 ^thickness_Alarm_Int @!
 0 ^Thickness_Alarm_Silence @!
 1000 ^Thousand_mSec_Delay @!
 3 ^THREE @!

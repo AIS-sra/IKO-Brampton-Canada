@@ -1043,6 +1043,7 @@ _END NEW $$$.RUN
 0 IVAR ^TEN_mSec_Delay
 0 FVAR ^TGT_Prof_Avg
 0 IVAR ^Thickness_Alarm_ACK
+0 IVAR ^thickness_Alarm_Int
 0 IVAR ^Thickness_Alarm_Silence
 0 IVAR ^Thousand_mSec_Delay
 0 IVAR ^THREE
@@ -3386,18 +3387,21 @@ T;
 -12 JUMP ;
 : 31_196
 2 LINE.NUM ^Comp_Avg @@ ^Profile_Y_1_C @@ F> ^Thickness_Alarm_ACK @@ 0 = LAND  IF 
-3 LINE.NUM 1 ~THICKNESS_ALARM @! 
-4 LINE.NUM ELSE 
-5 LINE.NUM THEN 
-8 LINE.NUM ^Comp_Avg @@ ^Profile_Y_5_C @@ F< ^Thickness_Alarm_ACK @@ 0 = LAND  IF 
-9 LINE.NUM 1 ~THICKNESS_ALARM @! 
-10 LINE.NUM ELSE 
-11 LINE.NUM THEN 
-14 LINE.NUM ^Comp_Avg @@ ^Profile_Y_5_C @@ F> ^Comp_Avg @@ ^Profile_Y_1_C @@ F< LAND  IF 
-15 LINE.NUM 0 ~THICKNESS_ALARM @! 
-16 LINE.NUM 0 ^Thickness_Alarm_ACK @! 
-17 LINE.NUM ELSE 
-18 LINE.NUM THEN 
+4 LINE.NUM 1 ~THICKNESS_ALARM @! 
+5 LINE.NUM 1 ^thickness_Alarm_Int @! 
+6 LINE.NUM ELSE 
+7 LINE.NUM THEN 
+10 LINE.NUM ^Comp_Avg @@ ^Profile_Y_5_C @@ F< ^Thickness_Alarm_ACK @@ 0 = LAND  IF 
+12 LINE.NUM 1 ~THICKNESS_ALARM @! 
+13 LINE.NUM 1 ^thickness_Alarm_Int @! 
+14 LINE.NUM ELSE 
+15 LINE.NUM THEN 
+17 LINE.NUM ^Comp_Avg @@ ^Profile_Y_5_C @@ F> ^Comp_Avg @@ ^Profile_Y_1_C @@ F< LAND  IF 
+19 LINE.NUM 0 ~THICKNESS_ALARM @! 
+20 LINE.NUM 0 ^Thickness_Alarm_ACK @! 
+21 LINE.NUM 0 ^thickness_Alarm_Int @! 
+22 LINE.NUM ELSE 
+23 LINE.NUM THEN 
 11 JUMP ;
 : 31_206
 1 LINE.NUM ^Edge_Trim_L_Stat @@ ^Loop_Counter_EOS F@! 
@@ -3636,7 +3640,13 @@ T;
 4 LINE.NUM ELSE 
 4 LINE.NUM THEN 
 6 LINE.NUM ^WW_Comm_CTR @@ ^WW_Comm_CTR_Temp @! 
-8 LINE.NUM 15 I>F  FDELAY 
+8 LINE.NUM ^Bad_STDZ_Alarm @@ 1 I>F F= ^Bad_Recipe_Alarm @@ 1 = LOR  ^Max_Error_Limit_Flag @@ 1 I>F F= LOR  ^Max_Corr_Limit_Flag @@ 1 I>F F= LOR  IF 
+9 LINE.NUM 1 ~THICKNESS_ALARM @! 
+10 LINE.NUM ELSE 
+10 LINE.NUM ^Comp_Avg @@ ^Profile_Y_5_C @@ F> ^Comp_Avg @@ ^Profile_Y_1_C @@ F< LAND  ^Scanner_Status @@ 4 = LOR  IF 
+11 LINE.NUM 0 ~THICKNESS_ALARM @! 
+12 LINE.NUM THEN THEN 
+14 LINE.NUM 15 I>F  FDELAY 
 -1 JUMP ;
 T: T43
 DUMMY
@@ -3661,6 +3671,7 @@ T;
 3 LINE.NUM ^Weight_Corr_Alert_CTR  1+@! 
 3 LINE.NUM ELSE 
 3 LINE.NUM THEN 
+5 LINE.NUM 0 ^Prof_Rev @! 
 -2 JUMP ;
 T: T42
 DUMMY
@@ -13989,17 +14000,18 @@ T;
 1 LINE.NUM ^Scanner_Status @@ 2 = ^Scanner_Status @@ 5 = LOR  ^OK_For_Control @@ 1 I>F F= LAND  ^Auto_Ctrl_Req @@ 1 = LAND  IF 
 3 LINE.NUM 1 ^Ctrl_Status @! 
 4 LINE.NUM 0 I>F ^Max_Corr_Limit_Flag @! 
-6 LINE.NUM THEN 
-8 LINE.NUM ^OK_For_Control @@ 1 I>F F= ^Max_Corr_Limit_Flag @@ 1 I>F F= ^Max_Error_Limit_Flag @@ 1 I>F F= LOR  LAND  IF 
-10 LINE.NUM 3 ^Ctrl_Status @! 
-13 LINE.NUM THEN 
-18 LINE.NUM ^Weight_Error_Neg @@ 5 >= ^Weight_Error_Pos @@ 5 >= LOR  IF 
-18 LINE.NUM 1 I>F ^Max_Corr_Limit_Flag @! 
-18 LINE.NUM 0 ^Auto_Ctrl_Req @! 
-18 LINE.NUM 0 ^Weight_Error_Pos @! 
-18 LINE.NUM 0 ^Weight_Error_Neg @! 
-18 LINE.NUM ELSE 
-18 LINE.NUM THEN 
+5 LINE.NUM 10 ^Edge_Scans @! 
+7 LINE.NUM THEN 
+9 LINE.NUM ^OK_For_Control @@ 1 I>F F= ^Max_Corr_Limit_Flag @@ 1 I>F F= ^Max_Error_Limit_Flag @@ 1 I>F F= LOR  LAND  IF 
+11 LINE.NUM 3 ^Ctrl_Status @! 
+14 LINE.NUM THEN 
+19 LINE.NUM ^Weight_Error_Neg @@ 6 >= ^Weight_Error_Pos @@ 6 >= LOR  IF 
+19 LINE.NUM 1 I>F ^Max_Corr_Limit_Flag @! 
+19 LINE.NUM 0 ^Auto_Ctrl_Req @! 
+19 LINE.NUM 0 ^Weight_Error_Pos @! 
+19 LINE.NUM 0 ^Weight_Error_Neg @! 
+19 LINE.NUM ELSE 
+19 LINE.NUM THEN 
 20 JUMP ;
 : 33_15
 28 JUMP ;
@@ -14172,38 +14184,39 @@ T;
 3 LINE.NUM THEN 
 5 LINE.NUM ^Scans_2_STDZ @@ ^STDZ_Interval @! 
 7 LINE.NUM ~THICKNESS_ALARM @@I 1 = ^Thickness_Alarm_ACK @@ 1 = LAND  IF 
-8 LINE.NUM 0 ~THICKNESS_ALARM @! 
-9 LINE.NUM ELSE 
-9 LINE.NUM THEN 
-11 LINE.NUM ^Spread_Reset @@ 1 = IF 
-12 LINE.NUM 0 ^Spread_Scans @! 
-13 LINE.NUM 0 ^Spread_Reset @! 
-14 LINE.NUM 0 I>F ^Spread_CD @! 
-15 LINE.NUM 0 I>F ^Spread_MD @! 
-16 LINE.NUM 0 I>F ^Spread_Total @! 
-17 LINE.NUM ELSE 
-18 LINE.NUM THEN 
-21 LINE.NUM ~E_STOP_SSIU @@I 0 = IF 
-22 LINE.NUM 69 ^Scanner_Status @! 
-23 LINE.NUM 0 I>F ~Motor_Control @! 
-24 LINE.NUM 0 ~Shutter_Insert @! 
-25 LINE.NUM THEN 
-28 LINE.NUM ^Web_Width @@ ^Web_Width_Inches @! 
-30 LINE.NUM ~Line_Speed_IP @@ 6.24933014e+001 F* 2.49695999e+002 F- ^Speed_Now @! 
-32 LINE.NUM ~E_STOP_SSIU @@I 0 = IF 
-32 LINE.NUM 1 I>F ^E_Stop_Alarm @! 
-32 LINE.NUM 1 ~E_Stop_Out @! 
-32 LINE.NUM ELSE 
-32 LINE.NUM 0 I>F ^E_Stop_Alarm @! 
-32 LINE.NUM 0 ~E_Stop_Out @! 
-32 LINE.NUM THEN 
-35 LINE.NUM ^Scanner_Status @@ 4 = ^Auto_Scan_Start @@ 1 = LAND  ^Speed_Now @@ ^Auto_Scan_Speed @@ F> LAND  ~E_Stop_Out @@I 0 = LAND  IF 
-35 LINE.NUM 1 ^Scanner_Status @! 
-35 LINE.NUM ELSE 
-35 LINE.NUM THEN 
-37 LINE.NUM ^Scanner_Status @@ 4 = ^Stdz_Required @@ 1 = LAND  ~E_Stop_Out @@I 0 = LAND  ^Bad_STDZ_Alarm @@ 0 I>F F= LAND  IF 
-38 LINE.NUM 10 ^Scanner_Status @! 
-39 LINE.NUM THEN 
+9 LINE.NUM 0 ~THICKNESS_ALARM @! 
+10 LINE.NUM 0 ^thickness_Alarm_Int @! 
+11 LINE.NUM ELSE 
+11 LINE.NUM THEN 
+13 LINE.NUM ^Spread_Reset @@ 1 = IF 
+14 LINE.NUM 0 ^Spread_Scans @! 
+15 LINE.NUM 0 ^Spread_Reset @! 
+16 LINE.NUM 0 I>F ^Spread_CD @! 
+17 LINE.NUM 0 I>F ^Spread_MD @! 
+18 LINE.NUM 0 I>F ^Spread_Total @! 
+19 LINE.NUM ELSE 
+20 LINE.NUM THEN 
+23 LINE.NUM ~E_STOP_SSIU @@I 0 = IF 
+24 LINE.NUM 69 ^Scanner_Status @! 
+25 LINE.NUM 0 I>F ~Motor_Control @! 
+26 LINE.NUM 0 ~Shutter_Insert @! 
+27 LINE.NUM THEN 
+30 LINE.NUM ^Web_Width @@ ^Web_Width_Inches @! 
+32 LINE.NUM ~Line_Speed_IP @@ 6.24933014e+001 F* 2.49695999e+002 F- ^Speed_Now @! 
+34 LINE.NUM ~E_STOP_SSIU @@I 0 = IF 
+34 LINE.NUM 1 I>F ^E_Stop_Alarm @! 
+34 LINE.NUM 1 ~E_Stop_Out @! 
+34 LINE.NUM ELSE 
+34 LINE.NUM 0 I>F ^E_Stop_Alarm @! 
+34 LINE.NUM 0 ~E_Stop_Out @! 
+34 LINE.NUM THEN 
+37 LINE.NUM ^Scanner_Status @@ 4 = ^Auto_Scan_Start @@ 1 = LAND  ^Speed_Now @@ ^Auto_Scan_Speed @@ F> LAND  ~E_Stop_Out @@I 0 = LAND  IF 
+37 LINE.NUM 1 ^Scanner_Status @! 
+37 LINE.NUM ELSE 
+37 LINE.NUM THEN 
+39 LINE.NUM ^Scanner_Status @@ 4 = ^Stdz_Required @@ 1 = LAND  ~E_Stop_Out @@I 0 = LAND  ^Bad_STDZ_Alarm @@ 0 I>F F= LAND  IF 
+40 LINE.NUM 10 ^Scanner_Status @! 
+41 LINE.NUM THEN 
 -18 JUMP ;
 : 33_127
 
@@ -15874,6 +15887,7 @@ CREATE V.ARRAY
 ^TEN_mSec_Delay ,
 ^TGT_Prof_Avg ,
 ^Thickness_Alarm_ACK ,
+^thickness_Alarm_Int ,
 ^Thickness_Alarm_Silence ,
 ^Thousand_mSec_Delay ,
 ^THREE ,
@@ -17257,7 +17271,7 @@ CONFIG_PORTS
 3.0000000 ^Max_Corr_Limit @!
 0.00000000 ^Max_Corr_Limit_Flag @!
 0.00000000 ^Max_Edge @!
-2.0000000 ^Max_Error_Limit @!
+3.0000000 ^Max_Error_Limit @!
 0.00000000 ^Max_Error_Limit_Flag @!
 72.000000 ^Max_Frame_Length @!
 248400.00 ^Max_Frame_Length_1 @!
@@ -17311,7 +17325,7 @@ CONFIG_PORTS
 0.00000000 ^Proc_Var_Type @!
 0 ^Prod_Change_Flag @!
 84 ^Prof_Ctr @!
-1 ^Prof_Rev @!
+0 ^Prof_Rev @!
 0 ^Prof_TGT_Mode @!
 0 ^Profile_Display_Avg @!
 0.00000000 ^Profile_X_1 @!
@@ -17487,6 +17501,7 @@ CONFIG_PORTS
 10 ^TEN_mSec_Delay @!
 0.00000000 ^TGT_Prof_Avg @!
 0 ^Thickness_Alarm_ACK @!
+0 ^thickness_Alarm_Int @!
 0 ^Thickness_Alarm_Silence @!
 1000 ^Thousand_mSec_Delay @!
 3 ^THREE @!
@@ -18041,9 +18056,9 @@ T;
    CLEARERRORS
    &_INIT_IO START.T DROP
    ;
-: DATESTAMP ." 09/03/25 " ;
-: TIMESTAMP ." 14:54:17 " ;
-: CRCSTAMP  ." F008DC3415ED1A70A16393003D9D8577 " ;
+: DATESTAMP ." 03/12/26 " ;
+: TIMESTAMP ." 11:13:13 " ;
+: CRCSTAMP  ." 86415D8C45D0213A6C9A386962A4155B " ;
 MAKECHECK
 CLEAR.BREAKS
 

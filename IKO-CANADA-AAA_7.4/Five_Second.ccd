@@ -7,7 +7,13 @@
 4 LINE.NUM ELSE 
 4 LINE.NUM THEN 
 6 LINE.NUM ^WW_Comm_CTR @@ ^WW_Comm_CTR_Temp @! 
-8 LINE.NUM 15 I>F  FDELAY 
+8 LINE.NUM ^Bad_STDZ_Alarm @@ 1 I>F F= ^Bad_Recipe_Alarm @@ 1 = LOR  ^Max_Error_Limit_Flag @@ 1 I>F F= LOR  ^Max_Corr_Limit_Flag @@ 1 I>F F= LOR  IF 
+9 LINE.NUM 1 ~THICKNESS_ALARM @! 
+10 LINE.NUM ELSE 
+10 LINE.NUM ^Comp_Avg @@ ^Profile_Y_5_C @@ F> ^Comp_Avg @@ ^Profile_Y_1_C @@ F< LAND  ^Scanner_Status @@ 4 = LOR  IF 
+11 LINE.NUM 0 ~THICKNESS_ALARM @! 
+12 LINE.NUM THEN THEN 
+14 LINE.NUM 15 I>F  FDELAY 
 -1 JUMP ;
 T: T43
 DUMMY

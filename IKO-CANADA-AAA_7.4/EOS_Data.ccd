@@ -1349,18 +1349,21 @@
 -12 JUMP ;
 : 31_196
 2 LINE.NUM ^Comp_Avg @@ ^Profile_Y_1_C @@ F> ^Thickness_Alarm_ACK @@ 0 = LAND  IF 
-3 LINE.NUM 1 ~THICKNESS_ALARM @! 
-4 LINE.NUM ELSE 
-5 LINE.NUM THEN 
-8 LINE.NUM ^Comp_Avg @@ ^Profile_Y_5_C @@ F< ^Thickness_Alarm_ACK @@ 0 = LAND  IF 
-9 LINE.NUM 1 ~THICKNESS_ALARM @! 
-10 LINE.NUM ELSE 
-11 LINE.NUM THEN 
-14 LINE.NUM ^Comp_Avg @@ ^Profile_Y_5_C @@ F> ^Comp_Avg @@ ^Profile_Y_1_C @@ F< LAND  IF 
-15 LINE.NUM 0 ~THICKNESS_ALARM @! 
-16 LINE.NUM 0 ^Thickness_Alarm_ACK @! 
-17 LINE.NUM ELSE 
-18 LINE.NUM THEN 
+4 LINE.NUM 1 ~THICKNESS_ALARM @! 
+5 LINE.NUM 1 ^thickness_Alarm_Int @! 
+6 LINE.NUM ELSE 
+7 LINE.NUM THEN 
+10 LINE.NUM ^Comp_Avg @@ ^Profile_Y_5_C @@ F< ^Thickness_Alarm_ACK @@ 0 = LAND  IF 
+12 LINE.NUM 1 ~THICKNESS_ALARM @! 
+13 LINE.NUM 1 ^thickness_Alarm_Int @! 
+14 LINE.NUM ELSE 
+15 LINE.NUM THEN 
+17 LINE.NUM ^Comp_Avg @@ ^Profile_Y_5_C @@ F> ^Comp_Avg @@ ^Profile_Y_1_C @@ F< LAND  IF 
+19 LINE.NUM 0 ~THICKNESS_ALARM @! 
+20 LINE.NUM 0 ^Thickness_Alarm_ACK @! 
+21 LINE.NUM 0 ^thickness_Alarm_Int @! 
+22 LINE.NUM ELSE 
+23 LINE.NUM THEN 
 11 JUMP ;
 : 31_206
 1 LINE.NUM ^Edge_Trim_L_Stat @@ ^Loop_Counter_EOS F@! 

@@ -1025,6 +1025,7 @@
 0 IVAR ^TEN_mSec_Delay
 0 FVAR ^TGT_Prof_Avg
 0 IVAR ^Thickness_Alarm_ACK
+0 IVAR ^thickness_Alarm_Int
 0 IVAR ^Thickness_Alarm_Silence
 0 IVAR ^Thousand_mSec_Delay
 0 IVAR ^THREE

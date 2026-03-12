@@ -4,7 +4,7 @@
 # ----------------------------------------------------------------
 # NAME :         C:\AIS_OPTO_APPLICATION\IKO-CANADA-AAA_7.4\IKO-CANADA-AAA_7.4.idb
 # VERSION :      R10.2a
-# TIME/DATE :    14:54:17 9/3/2025
+# TIME/DATE :    11:13:13 3/12/2026
 # 
 # INSTRUCTIONS : This file gets written with the corresponding IDB file.
 #                It is not read by PAC Control. It may be used by other programs to 
@@ -1152,6 +1152,7 @@ TAG1,TEN                                               ,41   ,00000000,00000000,
 TAG1,TEN_mSec_Delay                                    ,43   ,00000000,00000000,00000000,00000008,0    ,0   
 TAG1,TGT_Prof_Avg                                      ,2352 ,00000000,00000000,00000000,00000010,0    ,0   
 TAG1,Thickness_Alarm_ACK                               ,3152 ,00000000,00000000,00000000,00000008,0    ,0   
+TAG1,thickness_Alarm_Int                               ,3456 ,00000000,00000000,00000000,00000008,0    ,0   
 TAG1,Thickness_Alarm_Silence                           ,3153 ,00000000,00000000,00000000,00000008,0    ,0   
 TAG1,Thousand_mSec_Delay                               ,11   ,00000000,00000000,00000000,00000008,0    ,0   
 TAG1,THREE                                             ,9    ,00000000,00000000,00000000,00000008,0    ,0   
