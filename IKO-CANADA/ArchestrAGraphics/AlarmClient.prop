@@ -4,7 +4,7 @@
   "GObjectId": 805,
   "HelpId": "",
   "VisualElementName": "AlarmClient",
-  "IsProtected": false,
+  "IsProtected": true,
   "ContextObject": "",
   "TimeStamp": 134160733834461633,
   "VisualElementType": "ClientControl",
