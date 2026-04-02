@@ -58,6 +58,7 @@
   ^Stdz_Required @! 
 -2 JUMP ;
 : 33_29
+3 LINE.NUM 10 I>F  FDELAY 
 4 LINE.NUM 6.02500010e+000 ^Profile_Y @! 
 5 LINE.NUM ^Profile_Y_3 @@ ^Weight_TGT @! 
 6 LINE.NUM 0 ^Auto_Ctrl_Req @! 
@@ -245,9 +246,12 @@
 37 LINE.NUM 1 ^Scanner_Status @! 
 37 LINE.NUM ELSE 
 37 LINE.NUM THEN 
-39 LINE.NUM ^Scanner_Status @@ 4 = ^Stdz_Required @@ 1 = LAND  ~E_Stop_Out @@I 0 = LAND  ^Bad_STDZ_Alarm @@ 0 I>F F= LAND  IF 
-40 LINE.NUM 10 ^Scanner_Status @! 
-41 LINE.NUM THEN 
+39 LINE.NUM ^Scanner_Status @@ 2 <= ^Auto_Scan_Start @@ 1 = LAND  ^Speed_Now @@ ^Auto_Scan_Speed @@ F< LAND  ~E_Stop_Out @@I 0 = LAND  IF 
+39 LINE.NUM 3 ^Scanner_Status @! 
+39 LINE.NUM THEN 
+41 LINE.NUM ^Scanner_Status @@ 4 = ^Stdz_Required @@ 1 = LAND  ~E_Stop_Out @@I 0 = LAND  ^Bad_STDZ_Alarm @@ 0 I>F F= LAND  IF 
+42 LINE.NUM 10 ^Scanner_Status @! 
+43 LINE.NUM THEN 
 -18 JUMP ;
 : 33_127
 

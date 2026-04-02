@@ -625,10 +625,6 @@
 4 LINE.NUM
   ^THREE @@   ABS
   ^Scanner_Status @! 
-
-5 LINE.NUM
-  1    ABS
-  ^Stdz_Required @! 
 -50 JUMP ;
 : 5_507
 
